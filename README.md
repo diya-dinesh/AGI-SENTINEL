@@ -382,5 +382,3 @@ This project was created as a capstone submission for the Agentic AI course.
 For questions or feedback about this capstone project, please reach out through the course submission portal.
 
 ---
-
-**Built with ❤️ using Agentic AI principles**
