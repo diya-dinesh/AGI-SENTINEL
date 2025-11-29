@@ -1,0 +1,15 @@
+{
+  "pipeline_start": "2025-11-17 07:53:28.397877",
+  "ingest": {
+    "agent": "IngestAgent",
+    "action": "ingest",
+    "drug": "aspirin",
+    "fetched": 50,
+    "stored": 50,
+    "duration": 5.374952077865601
+  },
+  "stored_reports": 2,
+  "signals": [],
+  "report_path": "/Users/diyadinesh/Documents/agi_sentinel/orchestrator/../reports/aspirin_report.md",
+  "pipeline_end": "2025-11-17 07:53:33.788302"
+}

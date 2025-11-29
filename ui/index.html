@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>AGI-Sentinel | Pharmacovigilance Intelligence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Marked.js -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    /* Premium gradient background */
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* Glassmorphism effect */
+    .glass {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .glass-dark {
+      background: rgba(30, 30, 50, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Smooth animations */
+    .card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Loading animation */
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+      }
+
+      50% {
+        opacity: 0.8;
+        box-shadow: 0 0 30px rgba(99, 102, 241, 0.8);
+      }
+    }
+
+    .loading {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+
+    /* Button hover effects */
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    /* Shimmer effect for loading */
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+
+    .shimmer {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 1000px 100%;
+      animation: shimmer 2s infinite;
+    }
+
+    /* Stats counter animation */
+    @keyframes countUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stat-value {
+      animation: countUp 0.6s ease-out;
+    }
+
+    /* Signal badge pulse */
+    @keyframes badge-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .signal-badge {
+      animation: badge-pulse 2s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body class="text-slate-900 antialiased">
+
+  <!-- HEADER -->
+  <header class="mb-8 pt-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="glass-dark rounded-3xl p-8 shadow-2xl">
+
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+          <!-- Title Section -->
+          <div class="flex items-center gap-4">
+            <div
+              class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-400 to-purple-600 flex items-center justify-center shadow-lg">
+              <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-4xl font-black text-white tracking-tight">
+                AGI-Sentinel
+              </h1>
+              <p class="text-indigo-200 text-sm mt-1 font-medium">
+                AI-Powered Drug Safety Intelligence
+              </p>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="glass rounded-2xl p-5 shadow-lg">
+            <div class="flex flex-wrap items-end gap-3">
+
+              <div class="flex-1 min-w-[200px]">
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Drug
+                  Name</label>
+                <input id="drug-input"
+                  class="w-full rounded-xl px-4 py-2.5 bg-white border-2 border-slate-200 text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all font-medium"
+                  placeholder="e.g., aspirin" />
+              </div>
+
+              <div class="w-28">
+                <label class="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wide">Limit</label>
+                <input id="limit-input" type="number"
+                  class="w-full rounded-xl px-4 py-2.5 bg-white border-2 border-slate-200 text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all font-medium"
+                  value="100" />
+              </div>
+
+              <button id="run-btn"
+                class="btn-primary h-11 px-6 rounded-xl text-white font-bold shadow-lg hover:shadow-xl transition-all">
+                <span class="flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Run Analysis
+                </span>
+              </button>
+
+              <button id="refresh-btn"
+                class="h-11 px-5 rounded-xl bg-white border-2 border-slate-200 text-slate-700 font-semibold hover:border-indigo-300 hover:bg-indigo-50 shadow-sm hover:shadow transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+
+    <!-- STATUS BAR -->
+    <div id="status" class="hidden mb-6"></div>
+
+    <!-- STATS CARDS -->
+    <div id="stats-container" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="glass card rounded-2xl p-6 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold text-slate-600 uppercase tracking-wide">Signals Detected</p>
+            <p id="stat-signals" class="text-4xl font-black gradient-text stat-value mt-2">0</p>
+          </div>
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-red-400 to-pink-600 flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass card rounded-2xl p-6 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold text-slate-600 uppercase tracking-wide">Reports Analyzed</p>
+            <p id="stat-reports" class="text-4xl font-black gradient-text stat-value mt-2">0</p>
+          </div>
+          <div
+            class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass card rounded-2xl p-6 shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold text-slate-600 uppercase tracking-wide">Analysis Time</p>
+            <p id="stat-time" class="text-4xl font-black gradient-text stat-value mt-2">--</p>
+          </div>
+          <div
+            class="w-14 h-14 rounded-xl bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TWO-PANEL GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- SIGNALS CARD -->
+      <section class="glass card rounded-2xl border-0 p-6 shadow-xl">
+
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-3">
+            <span
+              class="w-10 h-10 rounded-lg bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </span>
+            Safety Signals
+          </h2>
+
+          <div class="flex items-center gap-3">
+            <input id="signals-search" placeholder="Search signals..."
+              class="w-48 rounded-lg px-3 py-2 border-2 border-slate-200 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all text-sm" />
+
+            <select id="signals-sort"
+              class="rounded-lg px-3 py-2 border-2 border-slate-200 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all text-sm font-medium">
+              <option value="count_desc">Count ↓</option>
+              <option value="z_desc">z-score ↓</option>
+              <option value="rel_desc">Relative ↓</option>
+              <option value="week_desc">Week ↓</option>
+              <option value="reaction_asc">Reaction A→Z</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="signals" class="text-sm">
+          <div class="text-center py-12 text-slate-400">
+            <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <p class="font-medium">No signals detected yet</p>
+            <p class="text-sm mt-1">Run an analysis to see safety signals</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- REPORT CARD -->
+      <section class="glass card rounded-2xl border-0 p-6 shadow-xl">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-3">
+            <span
+              class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </span>
+            Intelligence Report
+          </h2>
+          <div id="report-meta" class="text-xs text-slate-500 font-medium"></div>
+        </div>
+
+        <article id="report" class="prose prose-slate max-w-none">
+          <div class="text-center py-12 text-slate-400">
+            <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            <p class="font-medium">No report available</p>
+            <p class="text-sm mt-1">Run an analysis to generate a report</p>
+          </div>
+        </article>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    // Force reload by adding timestamp
+    const timestamp = new Date().getTime();
+    const script = document.createElement('script');
+    script.src = `./app.js?t=${timestamp}`;
+    document.body.appendChild(script);
+  </script>
+</body>
+
+</html>
